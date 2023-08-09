@@ -3,16 +3,11 @@ export const userInputs = [
       id: 1,
       label: "Username",
       type: "text",
-      placeholder: "john_doe",
+      placeholder: "john doe",
     },
+
     {
       id: 2,
-      label: "Name and surname",
-      type: "text",
-      placeholder: "John Doe",
-    },
-    {
-      id: 3,
       label: "Email",
       type: "mail",
       placeholder: "john_doe@gmail.com",
@@ -46,19 +41,19 @@ export const userInputs = [
   export const productInputs = [
     {
       id: 1,
-      label: "Title",
+      label: "Name",
       type: "text",
       placeholder: "Rawalpindi Billboard",
     },
     {
       id: 2,
-      label: "Billboard Location",
+      label: "Location",
       type: "text",
       placeholder: "Saddar",
     },
     {
       id: 3,
-      label: "Billboard Size",
+      label: "Size",
       type: "text",
       placeholder: "100 Inches",
     },

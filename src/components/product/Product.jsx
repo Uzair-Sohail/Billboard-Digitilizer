@@ -1,74 +1,46 @@
-import React from 'react';
-import DataTable from 'react-data-table-component';
-import './product.scss';
-const Products = () => {
-  // Sample data
-  const data = [
-    {
-      id: 1,
-      name: 'Rawalpindi Billboard',
-      price: '$100',
-      location: 'Saddar',
-      size: '100 Inches',
-      avilability: 'yes',
-    },
-    {
-      id: 2,
-      name: 'Islamabad',
-      price: '$800',
-      location: 'Blue Area',
-      size: '150 inches',
-      avilability:'No'
-    },
-    // Add more data as needed
+import React, { useState, useEffect } from 'react';
+import './product.scss'; // Import the custom styles
 
-  ];
+// ... Rest of your code ...
+const App = () => {
+  const [products, setProducts] = useState([]);
 
-  // Define columns
-  const columns = [
-    {
-      name: 'ID',
-      selector: 'id',
-      sortable: true,
-    },
-    {
-      name: 'Name',
-      selector: 'name',
-      sortable: true,
-    },
-    {
-      name: 'Price',
-      selector: 'price',
-      sortable: true,
-    },
-    {
-      name: 'Billboard Location',
-      selector: 'location',
-      sortable: true,
-    },
-    {
-      name: 'Billboard Size',
-      selector: 'size',
-      sortable: true,
-    },
-    {
-      name: 'Availability',
-      selector: 'available',
-      sortable: true,
-    },
-  ];
+  useEffect(() => {
+    // Fetch products from the API endpoint in the backend
+    fetch('http://localhost:3000/api/products')
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error('Error fetching products:', error));
+  }, []);
 
-  return (
-    <div className="container">
-    {/* <DataTable
-      title="Product Datatable"
-      columns={columns}
-      data={data}
-      pagination
-      className="table table-striped"
-    /> */}
+return (
+  <div className="root">
+    <h1>My Products</h1>
+    <div className="table-container">
+      <table className='styled-table'>
+        <thead>
+          <tr className='active-row'>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Availability</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product) => (
+            <tr key={product._id}>
+              <td>{product.name}</td>
+              <td>{product.billboardLocation}</td>
+              <td>{product.billboardSize}</td>
+              <td>{product.price}</td>
+              <td>{product.availability}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   </div>
-  );
+);
 };
-
-export default Products;
+export default App;

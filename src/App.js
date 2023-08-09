@@ -5,7 +5,7 @@ import Single from "./pages/single/Single";
 import New from "./pages/new/New";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { productInputs, userInputs } from "./formsource";
-import Products from "./components/product/Product";
+import Products from "./pages/products/Products";
 import Payment from "./pages/payment/Payment";
 import Chat from "./components/chat/Chat";
 // import { Order } from "./pages/orders/Order";
@@ -40,6 +40,7 @@ function App() {
           </Route>
           <Route path="/payment" element={<Payment />} />
           <Route path="/chat" element={<Chat />} />
+          
         </Routes>
       </BrowserRouter>
     </div>

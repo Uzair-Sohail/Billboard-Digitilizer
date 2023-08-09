@@ -1,16 +1,24 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
+import { userColumns, } from "../../datatablesource";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 
 const Datatable = () => {
-  const [data, setData] = useState(userRows);
+  const [data, setData] = useState();
+  useEffect(() => {
+    // Fetch products from the API endpoint in the backend
+    fetch('http://localhost:3000/api/users')
+      .then((response) => response.json())
+      .then((data) => setData(data))
+      .catch((error) => console.error('Error fetching products:', error));
+  }, []);
 
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    setData(data.filter((item) => item.id !== id)); // Change 'id' to the correct field
   };
+  
 
   const actionColumn = [
     {
@@ -34,24 +42,30 @@ const Datatable = () => {
       },
     },
   ];
+  
   return (
-    <div className="datatable">
-      <div className="datatableTitle">
-        Add New User
-        <Link to="/users/new" className="link">
-          Add New
-        </Link>
+      <div className="datatable">
+        <div className="datatableTitle">
+          Add New User
+          <Link to="/users/new" className="link">
+            Add New
+          </Link>
+        </div>
+        {data ? (
+          <DataGrid
+            className="datagrid"
+            rows={data}
+            columns={userColumns.concat(actionColumn)}
+            pageSize={7}
+            rowsPerPageOptions={[7]}
+            checkboxSelection
+          />
+        ) : (
+          <div>Loading data...</div>
+        )}
       </div>
-      <DataGrid
-        className="datagrid"
-        rows={data}
-        columns={userColumns.concat(actionColumn)}
-        pageSize={7}
-        rowsPerPageOptions={[7]}
-        checkboxSelection
-      />
-    </div>
-  );
+    );
+    
 };
 
 export default Datatable;

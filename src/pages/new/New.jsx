@@ -1,38 +1,50 @@
 import "./new.scss";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
+// import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 
 const New = ({ inputs, title }) => {
   const [file, setFile] = useState("");
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    phone: '',
+    password: '',
+    address: '',
+    country: '',
+  });
 
-  const submitForm = async () => {
-    const formInputs = {
-      title: 'Apple Macbook Pro',
-      billboardLocation: 'Blue Area',
-      billboardSize: '100 Inches',
-      price: '$600',
-      availability: 'Available',
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await fetch('/api/form', {
-        method: 'POST',
+      const response = await fetch('http://localhost:3000/api/users', {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formInputs),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         const savedProduct = await response.json();
-        console.log('Product saved:', savedProduct);
+        console.log("Product saved:", savedProduct);
+        // Add any success handling logic here
       } else {
-        console.error('Error saving product:', response.statusText);
+        console.error("Error saving product:", response.statusText);
+        // Add any error handling logic here
       }
     } catch (error) {
-      console.error('Error saving product:', error);
+      console.error("Error saving product:", error);
+      // Add any error handling logic here
     }
   };
 
@@ -56,23 +68,17 @@ const New = ({ inputs, title }) => {
             />
           </div>
           <div className="right">
-            <form>
-              <div className="formInput">
-                <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-              </div>
-
-              {inputs.map(({id,label,type,placeholder}) => (
+          <form onSubmit={handleSubmit}>
+              {inputs.map(({ id, label, type, placeholder }) => (
                 <div className="formInput" key={id}>
                   <label>{label}</label>
-                  <input type={type} placeholder={placeholder} />
+                  <input
+                    type={type}
+                    name={label.toLowerCase().replace(/\s/g, "")} // Generate name attribute from label (e.g., title, billboardLocation)
+                    placeholder={placeholder}
+                    value={formData[label.toLowerCase().replace(/\s/g, "")]}
+                    onChange={handleInputChange}
+                  />
                 </div>
               ))}
               <button type="submit">Send</button>
